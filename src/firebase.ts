@@ -1,11 +1,9 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+import { getFirestore } from "firebase/firestore";
+
 const firebaseConfig = {
   apiKey: "AIzaSyAj8PyqXn0Pz0Fyg6S-5whKZlH_RzPiaEg",
   authDomain: "likely-100.firebaseapp.com",
@@ -19,5 +17,18 @@ const firebaseConfig = {
 // Initialize Firebase
 const firebaseApp = initializeApp(firebaseConfig);
 
+export const db = getFirestore(firebaseApp);
 export const firebaseAuth = getAuth(firebaseApp);
+
+const googleProvider = new GoogleAuthProvider();
+export const signInWithGoogleProvider = () =>
+  signInWithPopup(firebaseAuth, googleProvider);
+
+firebaseAuth.onAuthStateChanged(async (authUser) => {
+  if (authUser) {
+    localStorage.setItem("token", await authUser.getIdToken());
+    localStorage.setItem("authUser", JSON.stringify(authUser));
+  } else localStorage.removeItem("authUser");
+});
+
 export default firebaseApp;
