@@ -20,7 +20,7 @@ const Profile = (props: ProfilePropsType) => {
       />
       <div className="flex flex-col items-start">
         {props.showGreeting && (
-          <p className="text-[#ABABAB] font-thin text-[12px]">Welcome Back,</p>
+          <p className="text-[#7e7e7e] font-thin text-[12px]">Welcome Back,</p>
         )}
         <p className="text-black font-[600] text-[17px] tracking-wide">
           {props.name}

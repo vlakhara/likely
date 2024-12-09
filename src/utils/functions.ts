@@ -12,6 +12,7 @@ import {
   where,
 } from "firebase/firestore";
 import { db, firebaseAuth, signInWithGoogleProvider } from "../firebase";
+import { COLORS } from "./Data";
 
 export async function handleSignUp(credentials: {
   username: string;
@@ -34,12 +35,15 @@ export async function handleSignUp(credentials: {
 
     if (user) {
       const userRef = doc(db, "Users", user?.uid);
+      const photoURL = await fetchAvatar(credentials.username);
       setDoc(userRef, {
         username: credentials.username,
         displayName: credentials.displayName,
         email: credentials.email,
+        photoURL,
       });
-      // localStorage.setItem("token", token);
+      localStorage.setItem("token", await user.getIdToken());
+      localStorage.setItem("authUser", JSON.stringify(user));
       window.location.href = "/dashboard";
     }
   } catch (error: unknown) {
@@ -72,7 +76,8 @@ export async function handleGoogleAuth() {
   try {
     const response = await signInWithGoogleProvider();
     if (response.user) {
-      // localStorage.setItem("token", token);
+      localStorage.setItem("token", await response.user.getIdToken());
+      localStorage.setItem("authUser", JSON.stringify(response.user));
       window.location.href = "/dashboard";
     }
   } catch (error) {
@@ -98,7 +103,8 @@ export async function handleSignIn(credentials: {
     );
 
     if (response.user) {
-      // localStorage.setItem("token", token);
+      localStorage.setItem("token", await response.user.getIdToken());
+      localStorage.setItem("authUser", JSON.stringify(response.user));
       window.location.href = "/dashboard";
     }
   } catch (error) {
@@ -122,3 +128,22 @@ export async function getUserByUserName(username: string) {
     console.log("getUserByUserName", error);
   }
 }
+
+async function fetchAvatar(username: string) {
+  try {
+    const avatarUrl = `https://avatars.dicebear.com/api/cartoon/${username}.svg`;
+    const response = await fetch(avatarUrl);
+    if (!response.ok) {
+      throw new Error("Failed to fetch avatar");
+    }
+    const blob = await response.blob();
+    return blob;
+  } catch (error) {
+    console.log("fetchAvatar", error);
+  }
+}
+
+export const getRandomColor = () => {
+  const ind = Math.floor(Math.random() * COLORS.length);
+  return COLORS[ind];
+};

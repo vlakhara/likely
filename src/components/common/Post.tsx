@@ -1,56 +1,68 @@
-import React from "react";
-import Profile from "./Profile";
 import { User } from "firebase/auth";
+import Like from "../../assets/svgs/Like";
+import Share from "../../assets/svgs/Share";
+import Profile from "./Profile";
 
-interface PostPropType {
+export interface PostPropType {
   post: {
-    postDetails: {};
     user: User;
+    postDetails: {
+      images: [string?];
+      description: string;
+      likes: number;
+      isLiked: boolean;
+    };
+    cardColor: string;
   };
+  handleLike: () => void;
 }
 
-const colors = [
-  "#D1E9F6",
-  "#F6EACB",
-  "#F1D3CE",
-  "#EECAD5",
-  "#D2E0FB",
-  "#FEF9D9",
-  "#DEE5D4",
-  "#E5D9F2",
-  "#F5EFFF",
-  "#F5EDED",
-  "#FFEBD4",
-  "#F7F9F2",
-  "#FEFFD2",
-  "#F1F1F1",
-  "#FFF2D7",
-  "#F0EBE3",
-  "#F6F5F2",
-  "#FFFBDA",
-  "#F8F6E3",
-  "#C6EBC5",
-  "#FEFDED",
-];
-
-const getRandomColor = () => {
-  const ind = Math.floor(Math.random() * colors.length);
-  return colors[ind];
-};
-
-const Post = ({ post }: PostPropType) => {
+const Post = ({ post, handleLike }: PostPropType) => {
   const { user } = post;
 
   return (
     <div
-      className={`min-h-[341px] w-full rounded-[26px] p-[12px]`}
-      style={{ background: getRandomColor() }}
+      className="w-full h-[max-content] rounded-[26px] p-[12px]"
+      style={{
+        background: post.cardColor,
+      }}
     >
       <Profile
-        imageUrl={user.photoURL || ""}
+        imageUrl={
+          "https://lh3.googleusercontent.com/a/ACg8ocKuCFLBWVSBJOZxF6Nxy5X3R7P2oJrzcvQ4o2asMonhlMza5LxV"
+        }
         name={user.displayName || ""}
         showTimestamp
       />
+      <div className="max-h-[150px] overflow-auto mt-[14px] py-1 flex justify-start">
+        <p className="text-left">
+          What is Lorem Ipsum? Lorem Ipsum is simply dummy text of the printing
+          and typesetting industry. Lorem Ipsum ha
+        </p>
+      </div>
+      {Boolean(post.postDetails.images.length) && (
+        <div className="Image-Section h-[200px] mt-[9px]"></div>
+      )}
+      <div className="Action-Section h-[50px] mt-[11px] flex items-center justify-between pl-[0.1px]">
+        <div className="cursor-pointer flex items-center gap-[8px]">
+          <span onClick={handleLike}>
+            <Like isLiked={post.postDetails.isLiked} />
+          </span>
+          <p className="text-[14px] tracking-wide font-medium">
+            {post.postDetails.likes}
+          </p>
+        </div>
+        <div className="rounded-[26px] h-[calc(100%-10px)] gap-[8px] relative overflow-hidden cursor-pointer">
+          <div
+            className=" bg-black opacity-[0.07]  h-full w-full absolute z-[1]]"
+            style={{ content: "" }}
+          ></div>
+          <div className="flex items-center gap-[8px] h-full w-full px-[16.5px] z-[2]">
+            <Share />
+            <p className="text-black">Share</p>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
