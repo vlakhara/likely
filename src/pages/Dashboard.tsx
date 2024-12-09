@@ -145,9 +145,7 @@ const Dashboard = () => {
         <div className="px-[16px] pt-[16px] flex flex-col relative">
           <div className="header">
             <Profile
-              imageUrl={
-                "https://lh3.googleusercontent.com/a/ACg8ocKuCFLBWVSBJOZxF6Nxy5X3R7P2oJrzcvQ4o2asMonhlMza5LxV"
-              }
+              imageUrl={user.photoURL || ""}
               name={user.displayName}
               showGreeting
             />

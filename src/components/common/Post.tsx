@@ -30,9 +30,7 @@ const Post = ({ post, handleLike, handleShare }: PostPropType) => {
       }}
     >
       <Profile
-        imageUrl={
-          "https://lh3.googleusercontent.com/a/ACg8ocKuCFLBWVSBJOZxF6Nxy5X3R7P2oJrzcvQ4o2asMonhlMza5LxV"
-        }
+        imageUrl={user.photoURL || ""}
         name={user.displayName || ""}
         showTimestamp
       />
