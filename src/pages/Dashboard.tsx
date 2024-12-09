@@ -5,9 +5,10 @@ import Post from "../components/common/Post";
 import Profile from "../components/common/Profile";
 import Wrapper from "../components/common/Wrapper";
 import { getRandomColor } from "../utils/functions";
+import ShareModal from "../components/ShareModal";
 
 const user = JSON.parse(localStorage.getItem("authUser") || JSON.stringify({}));
-interface PostType {
+export interface PostType {
   user: User;
   postDetails: {
     images: [string?];
@@ -19,6 +20,7 @@ interface PostType {
 }
 
 const Dashboard = () => {
+  const [openShareModal, setOpenShareModal] = useState<boolean>(false);
   const [posts, setPosts] = useState<PostType[]>([
     {
       user,
@@ -36,7 +38,7 @@ const Dashboard = () => {
       postDetails: {
         images: [],
         likes: 201,
-        isLiked: false,
+        isLiked: true,
         description:
           "What is Lorem Ipsum? Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum ha",
       },
@@ -58,7 +60,7 @@ const Dashboard = () => {
       postDetails: {
         images: [],
         likes: 19,
-        isLiked: false,
+        isLiked: true,
         description:
           "What is Lorem Ipsum? Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum ha",
       },
@@ -80,7 +82,7 @@ const Dashboard = () => {
       postDetails: {
         images: [],
         likes: 4,
-        isLiked: false,
+        isLiked: true,
         description:
           "What is Lorem Ipsum? Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum ha",
       },
@@ -133,6 +135,10 @@ const Dashboard = () => {
     );
   };
 
+  const handleShare = () => {
+    setOpenShareModal(true);
+  };
+
   return (
     <Wrapper privateRoute>
       <>
@@ -155,11 +161,18 @@ const Dashboard = () => {
 
           <div className="mt-[19px] text-black flex flex-col gap-[10px] overflow-y-auto h-[calc(100vh-160px)] sm:h-[780px] [&::-webkit-scrollbar]:hidden">
             {posts.map((post, index) => (
-              <Post post={post} handleLike={() => handleLike(index)} />
+              <Post
+                post={post}
+                handleLike={() => handleLike(index)}
+                handleShare={handleShare}
+              />
             ))}
           </div>
         </div>
       </>
+      {openShareModal && (
+        <ShareModal postId="1" handleClose={() => setOpenShareModal(false)} />
+      )}
     </Wrapper>
   );
 };

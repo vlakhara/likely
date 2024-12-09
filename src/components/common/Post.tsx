@@ -2,6 +2,7 @@ import { User } from "firebase/auth";
 import Like from "../../assets/svgs/Like";
 import Share from "../../assets/svgs/Share";
 import Profile from "./Profile";
+import { PostType } from "../../pages/Dashboard";
 
 export interface PostPropType {
   post: {
@@ -15,9 +16,10 @@ export interface PostPropType {
     cardColor: string;
   };
   handleLike: () => void;
+  handleShare: (post: PostType) => void;
 }
 
-const Post = ({ post, handleLike }: PostPropType) => {
+const Post = ({ post, handleLike, handleShare }: PostPropType) => {
   const { user } = post;
 
   return (
@@ -52,7 +54,12 @@ const Post = ({ post, handleLike }: PostPropType) => {
             {post.postDetails.likes}
           </p>
         </div>
-        <div className="rounded-[26px] h-[calc(100%-10px)] gap-[8px] relative overflow-hidden cursor-pointer">
+        <div
+          className="rounded-[26px] h-[calc(100%-10px)] gap-[8px] relative overflow-hidden cursor-pointer"
+          onClick={() => {
+            handleShare(post);
+          }}
+        >
           <div
             className=" bg-black opacity-[0.07]  h-full w-full absolute z-[1]]"
             style={{ content: "" }}
