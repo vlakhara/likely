@@ -64,7 +64,7 @@ const Post = ({ post, handleLike, handleShare }: PostPropType) => {
           ></div>
           <div className="flex items-center gap-[8px] h-full w-full px-[16.5px] z-[2]">
             <Share />
-            <p className="text-black">Share</p>
+            <p>Share</p>
           </div>
         </div>
       </div>

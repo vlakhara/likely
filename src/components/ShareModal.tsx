@@ -40,7 +40,7 @@ const ShareModal: React.FC<ShareModalProps> = ({ postId, handleClose }) => {
 
   return (
     <div className="h-full w-full md:w-[500px] flex items-center justify-center absolute">
-      <div className="min-h-[349px] min-w-[350px] w-[80%] py-[24px] px-[20px] text-black bg-white rounded-[12px] z-10 flex flex-col">
+      <div className="min-h-[349px] min-w-[350px] w-[80%] py-[24px] px-[20px] bg-white rounded-[12px] z-10 flex flex-col">
         <div className="flex items-center justify-between">
           <p className="text-[22px] w-[max-content] font-extrabold text-left">
             Share post

@@ -3,6 +3,7 @@ import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 
 import { getFirestore } from "firebase/firestore";
+import { getUserByEmail } from "./utils/functions";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAj8PyqXn0Pz0Fyg6S-5whKZlH_RzPiaEg",
@@ -26,8 +27,9 @@ export const signInWithGoogleProvider = () =>
 
 firebaseAuth.onAuthStateChanged(async (authUser) => {
   if (authUser) {
+    const user = await getUserByEmail(authUser.email || "");
     localStorage.setItem("token", await authUser.getIdToken());
-    localStorage.setItem("authUser", JSON.stringify(authUser));
+    localStorage.setItem("authUser", JSON.stringify({ ...authUser, ...user }));
   } else localStorage.removeItem("authUser");
 });
 

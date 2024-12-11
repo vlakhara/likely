@@ -22,9 +22,7 @@ const Profile = (props: ProfilePropsType) => {
         {props.showGreeting && (
           <p className="text-[#7e7e7e] font-thin text-[12px]">Welcome Back,</p>
         )}
-        <p className="text-black font-[600] text-[17px] tracking-wide">
-          {props.name}
-        </p>
+        <p className="font-[600] text-[17px] tracking-wide">{props.name}</p>
         {props.showTimestamp && (
           <p className="text-[12px]">
             {moment(new Date().toLocaleDateString()).format("Do MMMM, YYYY")}

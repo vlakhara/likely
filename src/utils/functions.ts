@@ -26,25 +26,31 @@ export async function handleSignUp(credentials: {
       return;
     }
 
+    const photoURL = await fetchAvatar(credentials.username);
+
     await createUserWithEmailAndPassword(
       firebaseAuth,
       credentials.email,
       credentials.password
     );
+
     const user = firebaseAuth.currentUser;
 
     if (user) {
       const userRef = doc(db, "Users", user?.uid);
-      const photoURL = await fetchAvatar(credentials.username);
-      setDoc(userRef, {
+      const payload = {
         username: credentials.username,
         displayName: credentials.displayName,
         email: credentials.email,
         photoURL,
-      });
+      };
+      await setDoc(userRef, payload);
+
       localStorage.setItem("token", await user.getIdToken());
-      localStorage.setItem("authUser", JSON.stringify(user));
-      window.location.href = "/dashboard";
+      localStorage.setItem("authUser", JSON.stringify({ ...user, ...payload }));
+      setTimeout(() => {
+        window.location.href = "/dashboard";
+      }, 1000);
     }
   } catch (error: unknown) {
     if (
@@ -104,7 +110,10 @@ export async function handleSignIn(credentials: {
 
     if (response.user) {
       localStorage.setItem("token", await response.user.getIdToken());
-      localStorage.setItem("authUser", JSON.stringify(response.user));
+      localStorage.setItem(
+        "authUser",
+        JSON.stringify({ ...response.user, ...user })
+      );
       window.location.href = "/dashboard";
     }
   } catch (error) {
@@ -129,17 +138,20 @@ export async function getUserByUserName(username: string) {
   }
 }
 
-async function fetchAvatar(username: string) {
+export async function getUserByEmail(email: string) {
   try {
-    const avatarUrl = `https://avatars.dicebear.com/api/cartoon/${username}.svg`;
-    const response = await fetch(avatarUrl);
-    if (!response.ok) {
-      throw new Error("Failed to fetch avatar");
+    const userQuery = query(
+      collection(db, "Users"),
+      where("email", "==", email)
+    );
+
+    const users = await getDocs(userQuery);
+
+    if (!users.empty) {
+      return users.docs[0].data();
     }
-    const blob = await response.blob();
-    return blob;
   } catch (error) {
-    console.log("fetchAvatar", error);
+    console.log("getUserByUserName", error);
   }
 }
 
@@ -147,3 +159,42 @@ export const getRandomColor = () => {
   const ind = Math.floor(Math.random() * COLORS.length);
   return COLORS[ind];
 };
+
+async function fetchAvatar(username: string) {
+  try {
+    const avatarUrl = `https://api.dicebear.com/9.x/lorelei/svg?seed=${username}`;
+    const response = await fetch(avatarUrl);
+    if (!response.ok) {
+      throw new Error("Failed to fetch avatar");
+    }
+    const blob = await response.blob();
+    return uploadToCloudinary(blob, username);
+  } catch (error) {
+    console.log("fetchAvatar", error);
+  }
+}
+
+async function uploadToCloudinary(blob: Blob, fileName: string) {
+  const CLOUD_NAME = process.env.REACT_APP_CLOUD_NAME;
+  const UPLOAD_PRESET = process.env.REACT_APP_UPLOAD_PRESET;
+
+  const formData = new FormData();
+  formData.append("file", blob);
+  formData.append("upload_preset", UPLOAD_PRESET || "");
+  formData.append("public_id", fileName);
+
+  try {
+    const response = await fetch(
+      `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`,
+      {
+        method: "POST",
+        body: formData,
+      }
+    );
+
+    const data = await response.json();
+    return data.secure_url;
+  } catch (error) {
+    console.error("Error uploading to Cloudinary:", error);
+  }
+}

@@ -151,13 +151,12 @@ const Dashboard = () => {
             />
           </div>
           <div className="mt-[31px]">
-            <p className="text-black text-left text-[24px] font-[800] tracking-[2px]">
+            <p className="text-left text-[24px] font-[800] tracking-[2px]">
               Feeds
             </p>
           </div>
           <AddPost />
-
-          <div className="mt-[19px] text-black flex flex-col gap-[10px] overflow-y-auto h-[calc(100vh-160px)] sm:h-[780px] [&::-webkit-scrollbar]:hidden">
+          <div className="mt-[19px] flex flex-col gap-[10px] overflow-y-auto h-[calc(100vh-160px)] sm:h-[780px] [&::-webkit-scrollbar]:hidden">
             {posts.map((post, index) => (
               <Post
                 post={post}

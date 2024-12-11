@@ -82,7 +82,7 @@ const Auth = () => {
         } bg-white rounded-t-[63px] overflow-hidden shadow-upper transition-all duration-2000 ease-in-out z-[1]`}
       >
         <div className="mb-1">
-          <p className="text-black 500 mt-2 text-center text-[25px] font-bold first-letter:tracking-wider">
+          <p className=" 500 mt-2 text-center text-[25px] font-bold first-letter:tracking-wider">
             Likely
           </p>
           <p className="text-indigo-950 text-center text-[15px] font-thin">
@@ -107,7 +107,7 @@ const Auth = () => {
               placeholder="Display Name"
               className={`${
                 type === "LOGIN" ? "hidden" : ""
-              } px-4 mt-2 h-[45px] min-w-[250px] text-black tracking-wide border border-black focus:border-black rounded-[12px] outline-none transition-all duration-700 ease-in-out`}
+              } px-4 mt-2 h-[45px] min-w-[250px]  tracking-wide border border-black focus:border-black rounded-[12px] outline-none transition-all duration-700 ease-in-out`}
               onChange={handleChange("displayName")}
               required={type === "SIGNUP"}
             />
@@ -115,7 +115,7 @@ const Auth = () => {
               type="text"
               value={credentials.username}
               placeholder="Username"
-              className={`px-4 mt-2 h-[45px] min-w-[250px] text-black tracking-wide border border-black focus:border-black rounded-[12px] outline-none`}
+              className={`px-4 mt-2 h-[45px] min-w-[250px]  tracking-wide border border-black focus:border-black rounded-[12px] outline-none`}
               onChange={handleChange("username")}
               required={type === "SIGNUP"}
             />
@@ -130,7 +130,7 @@ const Auth = () => {
               placeholder="Email"
               className={`${
                 type === "LOGIN" ? "hidden" : ""
-              } px-4 mt-2 h-[45px] min-w-[250px] text-black tracking-wide border border-black focus:border-black rounded-[12px] outline-none transition-all duration-700 ease-in-out`}
+              } px-4 mt-2 h-[45px] min-w-[250px]  tracking-wide border border-black focus:border-black rounded-[12px] outline-none transition-all duration-700 ease-in-out`}
               onChange={handleChange("email")}
               required={type === "SIGNUP"}
             />
@@ -138,14 +138,14 @@ const Auth = () => {
               type="password"
               placeholder="Password"
               value={credentials.password}
-              className="px-4 mt-2 h-[50px] min-w-[250px] text-black tracking-wide border border-black focus:border-black rounded-[12px] outline-none"
+              className="px-4 mt-2 h-[50px] min-w-[250px]  tracking-wide border border-black focus:border-black rounded-[12px] outline-none"
               onChange={handleChange("password")}
               required
             />
             <button
               type="submit"
               disabled={isNotUserNameAvailable || loading}
-              className="disabled:bg-gray-400 px-4 mt-4 mb-1 h-[45px] min-w-[250px] bg-black hover:bg-white hover:text-black hover:border hover:border-black text-center tracking-wide rounded-[12px] outline-none transition-all"
+              className="disabled:bg-gray-400 px-4 mt-4 mb-1 h-[45px] min-w-[250px] bg-black hover:bg-white hover: hover:border hover:border-black text-center tracking-wide rounded-[12px] outline-none transition-all"
             >
               {type === "LOGIN" ? "Login" : "Sign Up"}
             </button>
