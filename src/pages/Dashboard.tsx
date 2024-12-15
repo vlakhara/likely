@@ -62,7 +62,6 @@ const Dashboard = () => {
               imageUrl={user.photoURL || ""}
               name={user.displayName}
               showGreeting
-              isClickable
             />
           </div>
           <div className="mt-[31px]">
