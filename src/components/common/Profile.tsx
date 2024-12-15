@@ -6,11 +6,36 @@ interface ProfilePropsType {
   showTimestamp?: boolean;
   showGreeting?: boolean;
   isPost?: boolean;
+  date?: string;
+  isClickable?: boolean;
 }
 
 const Profile = (props: ProfilePropsType) => {
+  const getPostedDays = () => {
+    const date = props.date;
+    const days = moment().diff(moment(date), "days");
+    const hours = moment().diff(moment(date), "hours");
+    const minutes = moment().diff(moment(date), "minutes");
+    if (days === 0) {
+      if (hours === 0) {
+        if (minutes === 0) {
+          return "Just now";
+        }
+        return `${minutes} ${minutes === 1 ? "minute" : "minutes"} ago`;
+      }
+      return `${hours} ${hours === 1 ? "hour" : "hours"} ago`;
+    }
+    return `${days} ${days === 1 ? "day" : "days"} ago`;
+  };
+
+  const handleLClick = () => {
+    if (props.isClickable) {
+      window.location.href = "/dashboard";
+    }
+  };
+
   return (
-    <div className={`flex gap-[16px] items-center`}>
+    <div className={`flex gap-[16px] items-center`} onClick={handleLClick}>
       <img
         src={props.imageUrl}
         alt="profile"
@@ -24,9 +49,7 @@ const Profile = (props: ProfilePropsType) => {
         )}
         <p className="font-[600] text-[17px] tracking-wide">{props.name}</p>
         {props.showTimestamp && (
-          <p className="text-[12px]">
-            {moment(new Date().toLocaleDateString()).format("Do MMMM, YYYY")}
-          </p>
+          <p className="text-[12px]">{getPostedDays()}</p>
         )}
       </div>
     </div>

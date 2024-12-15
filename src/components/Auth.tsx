@@ -74,11 +74,11 @@ const Auth = () => {
       <img
         src={"./assets/image.png"}
         alt="logo"
-        className="h-full w-full object-contain absolute bottom-[50px]"
+        className="h-full w-full object-top absolute"
       />
       <div
         className={`flex flex-col ${
-          type === "LOGIN" ? "h-[400px]" : "h-[525px]"
+          type === "LOGIN" ? "h-[370px]" : "h-[470px]"
         } bg-white rounded-t-[63px] overflow-hidden shadow-upper transition-all duration-2000 ease-in-out z-[1]`}
       >
         <div className="mb-1">
@@ -145,7 +145,7 @@ const Auth = () => {
             <button
               type="submit"
               disabled={isNotUserNameAvailable || loading}
-              className="disabled:bg-gray-400 px-4 mt-4 mb-1 h-[45px] min-w-[250px] bg-black hover:bg-white hover: hover:border hover:border-black text-center tracking-wide rounded-[12px] outline-none transition-all"
+              className="disabled:bg-gray-400 px-4 mt-4 mb-1 h-[45px] min-w-[250px] bg-black hover:bg-white hover: hover:border hover:border-black text-center tracking-wide rounded-[12px] outline-none transition-all text-white"
             >
               {type === "LOGIN" ? "Login" : "Sign Up"}
             </button>
@@ -162,7 +162,7 @@ const Auth = () => {
 
             <button
               type="button"
-              className={`flex items-center gap-4 bg-[#292929] mt-1 px-5 py-3 rounded-[26px]`}
+              className={`flex items-center gap-4 bg-[#292929] mt-1 px-5 py-3 rounded-[26px] text-white`}
               onClick={handleGoogleAuth}
             >
               <Google />

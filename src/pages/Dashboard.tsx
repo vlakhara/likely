@@ -1,134 +1,48 @@
 import { User } from "firebase/auth";
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import AddPost from "../components/common/AddPost";
 import Post from "../components/common/Post";
 import Profile from "../components/common/Profile";
 import Wrapper from "../components/common/Wrapper";
-import { getRandomColor } from "../utils/functions";
 import ShareModal from "../components/ShareModal";
+import { useData } from "../context";
+import { dislikePost, getPosts, likePost } from "../utils/functions";
 
 const user = JSON.parse(localStorage.getItem("authUser") || JSON.stringify({}));
 export interface PostType {
+  id: string;
   user: User;
-  postDetails: {
-    images: [string?];
-    description: string;
-    likes: number;
-    isLiked: boolean;
-  };
-  cardColor: string;
+  images: [string?];
+  description: string;
+  likes: number;
+  isLiked: boolean;
 }
 
 const Dashboard = () => {
   const [openShareModal, setOpenShareModal] = useState<boolean>(false);
-  const [posts, setPosts] = useState<PostType[]>([
-    {
-      user,
-      postDetails: {
-        images: [""],
-        likes: 333,
-        isLiked: false,
-        description:
-          "What is Lorem Ipsum? Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum ha",
-      },
-      cardColor: getRandomColor(),
-    },
-    {
-      user,
-      postDetails: {
-        images: [],
-        likes: 201,
-        isLiked: true,
-        description:
-          "What is Lorem Ipsum? Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum ha",
-      },
-      cardColor: getRandomColor(),
-    },
-    {
-      user,
-      postDetails: {
-        images: [],
-        likes: 188,
-        isLiked: false,
-        description:
-          "What is Lorem Ipsum? Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum ha",
-      },
-      cardColor: getRandomColor(),
-    },
-    {
-      user,
-      postDetails: {
-        images: [],
-        likes: 19,
-        isLiked: true,
-        description:
-          "What is Lorem Ipsum? Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum ha",
-      },
-      cardColor: getRandomColor(),
-    },
-    {
-      user,
-      postDetails: {
-        images: [],
-        likes: 1,
-        isLiked: false,
-        description:
-          "What is Lorem Ipsum? Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum ha",
-      },
-      cardColor: getRandomColor(),
-    },
-    {
-      user,
-      postDetails: {
-        images: [],
-        likes: 4,
-        isLiked: true,
-        description:
-          "What is Lorem Ipsum? Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum ha",
-      },
-      cardColor: getRandomColor(),
-    },
-    {
-      user,
-      postDetails: {
-        images: [],
-        likes: 30,
-        isLiked: false,
-        description:
-          "What is Lorem Ipsum? Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum ha",
-      },
-      cardColor: getRandomColor(),
-    },
-    {
-      user,
-      postDetails: {
-        images: [],
-        likes: 99,
-        isLiked: false,
-        description:
-          "What is Lorem Ipsum? Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum ha",
-      },
-      cardColor: getRandomColor(),
-    },
-    {
-      user,
-      postDetails: {
-        images: [],
-        likes: 178,
-        isLiked: false,
-        description:
-          "What is Lorem Ipsum? Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum ha",
-      },
-      cardColor: getRandomColor(),
-    },
-  ]);
+  const { posts, setPosts } = useData();
+
+  const fetchPosts = useCallback(async () => {
+    const response = await getPosts();
+    if (!response) return;
+    setPosts(response);
+  }, [setPosts]);
+
+  useEffect(() => {
+    fetchPosts();
+  }, [fetchPosts]);
 
   const handleLike = (index: number) => {
     setPosts((prev) =>
       prev.map((post: PostType, i: number) => {
         if (i === index) {
-          post.postDetails.likes += post.postDetails.isLiked ? -1 : 1;
-          post.postDetails.isLiked = !post.postDetails.isLiked;
+          if (post.isLiked) {
+            dislikePost(post.id);
+          } else {
+            likePost(post.id);
+          }
+          post.likes += post.isLiked ? -1 : 1;
+          post.isLiked = !post.isLiked;
         }
         return post;
       })
@@ -148,6 +62,7 @@ const Dashboard = () => {
               imageUrl={user.photoURL || ""}
               name={user.displayName}
               showGreeting
+              isClickable
             />
           </div>
           <div className="mt-[31px]">
