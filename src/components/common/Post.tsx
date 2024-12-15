@@ -2,9 +2,8 @@ import { User } from "firebase/auth";
 import Like from "../../assets/svgs/Like";
 import Share from "../../assets/svgs/Share";
 import { PostType } from "../../pages/Dashboard";
-import PostImages from "../PostImages";
-import Profile from "./Profile";
 import Carousel from "./ImageCaraousel";
+import Profile from "./Profile";
 
 export interface PostPropType {
   post: {
@@ -52,9 +51,9 @@ const Post = ({ post, handleLike, handleShare }: PostPropType) => {
         {prepareDescription().map((word, index) => (
           <p
             key={index}
-            className={`text-left ${word.isHashTag ? "text-[#3f19ff]" : ""}`}
+            className={`text-left ${word.isHashTag ? "text-[#2558ff]" : ""}`}
           >
-            {word.word}
+            {word.word + " "}
           </p>
         ))}
       </div>
